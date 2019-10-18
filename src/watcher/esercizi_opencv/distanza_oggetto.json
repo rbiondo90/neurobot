@@ -1,0 +1,12 @@
+{
+	"colorParameters": {
+		"lowerBound": [20, 125, 0],
+		"upperBound": [40, 255, 255]
+	},
+	"gaussianBlurParameters": {
+		"maskSize": 11,
+		"sigmaX": 0
+	},
+	"erodeIterations": 3,
+	"dilateIterations": 3
+}
