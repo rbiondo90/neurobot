@@ -12,7 +12,7 @@ from keras.layers.core import Flatten
 from keras.layers.core import Dense
 from keras import models
 from keras import backend
-from or_dataset_loader import load_dataset
+from recognizers.object_recognizer.or_dataset_loader import load_dataset
 import matplotlib.pyplot as plt
 import cv2
 from keras_preprocessing.image import img_to_array
@@ -107,7 +107,9 @@ class ObjectRecognizerNet:
         else:
             print("Non c'e' nessuna storia da plottare.")
 
-    def evaluate(self, (test_images, test_output) = load_dataset("", False)):
+    def evaluate(self, test_images=None, test_output=None):
+        if test_images is None or test_output is None:
+            (test_images, test_output) = load_dataset("", False)
         self.model.evaluate(test_images, test_output)
 
 if __name__ == '__main__':

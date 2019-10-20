@@ -116,7 +116,9 @@ class ObjectBoundingBoxRecognizer:
         else:
             print("Non c'e' nessuna storia da plottare.")
 
-    def evaluate(self, (test_images, test_output) = load_dataset("", False)):
+    def evaluate(self, test_images=None, test_output=None):
+        if test_images is None or test_output is None:
+            (test_images, test_output) = load_dataset("", False)
         self.model.evaluate(test_images, test_output)
 
 

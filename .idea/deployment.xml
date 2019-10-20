@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="deeplearning" uploadOnCheckin="e729e7ba-929d-45da-b80f-09aca83e415e">
+    <serverData>
+      <paths name="deeplearning">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/rbiondo/robotics/neurobot" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="deeplearning (project level)">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/rbiondo/robotics/neurobot" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+      <paths name="ubuntu16@localhost:2222">
+        <serverdata>
+          <mappings>
+            <mapping local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myUploadOnCheckinName" value="deeplearning" />
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
