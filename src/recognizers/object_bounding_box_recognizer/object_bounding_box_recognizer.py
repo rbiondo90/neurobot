@@ -48,7 +48,7 @@ class ObjectBoundingBoxRecognizer:
     def predict(self, image):
         if type(image) == str:
             image = cv2.imread(image)
-        if image.shape[0:2] != self.model.input_shape[0:2]:
+        if image.shape[0:2] != self.input_shape[0:2]:
             image = cv2.resize(image, self.input_shape[0:2])
         if image.dtype == 'uint8':
             image = image.astype('float32') / 255.
