@@ -5,14 +5,7 @@
       <paths name="deeplearning">
         <serverdata>
           <mappings>
-            <mapping deploy="/home/rbiondo/robotics/neurobot" local="$PROJECT_DIR$" web="/" />
-          </mappings>
-        </serverdata>
-      </paths>
-      <paths name="deeplearning (project level)">
-        <serverdata>
-          <mappings>
-            <mapping deploy="/home/rbiondo/robotics/neurobot" local="$PROJECT_DIR$" web="/" />
+            <mapping deploy="/robotics/neurobot" local="$PROJECT_DIR$" web="/" />
           </mappings>
         </serverdata>
       </paths>

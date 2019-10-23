@@ -14,30 +14,34 @@ def load_dataset(dataset_path=DEFAULT_DATASET_DIRECTORY, im_size = (128,128), sh
     data = []
     labels = []
     # Prende le immagini dalle directory e (se shuffle e' true) le mischia casualmente
-    imagePaths = sorted(list(paths.list_images(dataset_path)))
+    image_paths = sorted(list(paths.list_images(dataset_path)))
     if shuffle:
         # Usiamo un seed casuale
         random.seed(int(time.time() % 1000))
-        random.shuffle(imagePaths)
+        random.shuffle(image_paths)
     # loop sulle immagini di input
     count = 1
-    for imagePath in imagePaths:
-        # Carica l'immagine, la pre elabora e la memorizza nella lista di dati
-        image = cv2.imread(imagePath)
-        image = cv2.resize(image, im_size)
-        image = img_to_array(image)
-        data.append(image)
-        # estrae le label dal path dell'imamgine e aggiorna la lista delle label
-        label = imagePath.split(os.path.sep)[-2]
-        print("Sto elaborando l'immagine %d di %d..." % (count, len(imagePaths)))
-        if label == "item":
-            label = 1
-        else:
-            label = 0
-        labels.append(label)
+    for image_path in image_paths:
+        print("Sto elaborando l'immagine %d di %d..." % (count, len(image_paths)))
+        data.append(prepare_image(image_path, im_size))
+        labels.append(get_label(image_path))
         count += 1
-    # Normalizziamo i valori dei pixel in modo da farli rientrare nell'intervallo [0,1]
-    data = np.array(data, dtype="float") / 255.0
     labels = np.array(labels)
+    data = np.array(data)
     return data, labels
+
+def prepare_image(im_path, im_size):
+    image = cv2.imread(im_path)
+    image = cv2.resize(image, im_size)
+    return np.array(image, dtype="float") / 255.0
+
+def get_label(im_path):
+    if im_path.split(os.path.sep)[-2] == "item":
+        return 1
+    else:
+        return 0
+
+if __name__ == '__main__':
+    data, labels = load_dataset()
+    print("Dataset caricato")
 

@@ -24,12 +24,12 @@ class Watcher:
         return area
 
     def elaborate_image(self, image):
-        wheel_confidence = self.object_recognizer.predict(image)
+        found_object, probability = self.object_recognizer.contains_object(image)
         image_copy = np.copy(image)
         if image_copy.shape[0] < 640 or image_copy.shape[1] < 480:
             image_copy = cv2.resize(image_copy, (640, 480))
-        if wheel_confidence > 0.75:
-            text = "Detected, confidence %.2f" % wheel_confidence
+        text = "%sdetected, confidence %.2f" % ("" if found_object else "not ", probability)
+        if found_object:
             # de_normalization_x = image_copy.shape[1]/128.
             # de_normalization_y = image_copy.shape[0]/128.
             bounding_box_coords = self.object_bounding_box_recognizer.predict(image)
@@ -46,9 +46,6 @@ class Watcher:
                               (bounding_box_coords[1],bounding_box_coords[3]),(255,255,255))
                 cv2.putText(image_copy, "Normalized area: %d" % int(area), (5, 100),
                             cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, 2)
-
-        else:
-            text = "Undetected, confidence %.2f" % (1. - wheel_confidence)
         cv2.putText(image_copy, text, (5, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, 2)
         return image_copy
 

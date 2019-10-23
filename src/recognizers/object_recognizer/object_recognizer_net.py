@@ -16,8 +16,10 @@ from recognizers.object_recognizer.or_dataset_loader import load_dataset
 import matplotlib.pyplot as plt
 import cv2
 from keras_preprocessing.image import img_to_array
+from keras.utils import to_categorical
 import os
 import defaults
+import numpy as np
 
 
 class ObjectRecognizerNet:
@@ -45,17 +47,23 @@ class ObjectRecognizerNet:
     def predict(self, image):
         if type(image) == str:
             image = cv2.imread(image)
-        if image.shape[0:2] != self.input_shape[0:2]:
-            image = cv2.resize(image, self.input_shape[0:2])
-        if image.dtype == 'uint8':
-            image = image.astype('float32') / 255.
-        return self.model.predict(image.reshape((1,) + self.input_shape))[0][0]
+        image = cv2.resize(image, self.input_shape[0:2])
+        image = image.astype('float') / 255.
+        image = img_to_array(image)
+        image = np.expand_dims(image, axis=0)
+        return self.model.predict(image)[0]
+
+    def contains_object(self, image):
+        (undetected_prob, detected_prob) = self.predict(image)
+        probability = max(undetected_prob, detected_prob)
+        return (detected_prob > undetected_prob, probability)
+
 
     def train(self, input_images=None, output_classification=None, learning_rate=DEFAULT_LEARNING_RATE,
               epochs=DEFAULT_EPOCHS, test_size=DEFAULT_TEST_SIZE, batch_size=DEFAULT_BATCH_SIZE):
         if input_images is None or output_classification is None:
             print("Sto caricando il dataset di default...")
-            input_images, output_classification = load_dataset()
+            input_images, output_classification = load_dataset(im_size=self.input_shape[0:2], shuffle=False)
         print("Sto creando l'ottimizzatore per il training...")
         opt = Adam(lr=learning_rate, decay=learning_rate / epochs)
         print("Sto compilando il modello della rete...")
@@ -63,6 +71,8 @@ class ObjectRecognizerNet:
         print("Sto dividendo il dataset in train e test set con test_size = %.2f..." % test_size)
         (train_input, test_input, train_output, test_output) = train_test_split(input_images, output_classification,
                                                                                 test_size=test_size)
+        train_output = to_categorical(train_output, num_classes=2)
+        test_output = to_categorical(test_output, num_classes=2)
         print("Sto creando l'augmentator per il training...")
         aug = ImageDataGenerator(rotation_range=40, width_shift_range=0.2, height_shift_range=0.2, shear_range=0.1,
                                  zoom_range=0.2, horizontal_flip=True, fill_mode="nearest")
@@ -86,9 +96,8 @@ class ObjectRecognizerNet:
         model.add(Flatten())
         model.add(Dense(500))
         model.add(Activation("relu"))
-        # classificatore sigmoide
-        model.add(Dense(1))
-        model.add(Activation("sigmoid"))
+        model.add(Dense(2))
+        model.add(Activation("softmax"))
         self.model = model
 
 
@@ -110,7 +119,7 @@ class ObjectRecognizerNet:
 
     def evaluate(self, test_images=None, test_output=None):
         if test_images is None or test_output is None:
-            (test_images, test_output) = load_dataset("", False)
+            (test_images, test_output) = load_dataset(im_size=self.input_shape[0:2], shuffle=False)
         self.model.evaluate(test_images, test_output)
 
 if __name__ == '__main__':
