@@ -2,7 +2,7 @@ import cv2
 import threading
 
 
-def imshow(window_title, image, callback=None):
+def imshow(image, window_title='', callback=None):
     #def thread_function():
     if image.shape[0] > 900:
         image = cv2.resize(image, (640,640))

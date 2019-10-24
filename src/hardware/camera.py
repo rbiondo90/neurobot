@@ -1,8 +1,8 @@
 import cv2
-import util
+from utils import util
 
 
-class CameraImage:
+class Camera:
 
     def __init__(self, device=0):
         self.__devid = device
@@ -42,5 +42,5 @@ class CameraImage:
         cv2.imwrite(path, self.get_image(gray))
 
 if __name__ == '__main__':
-    cam = CameraImage(device = 0)
+    cam = Camera(device = 0)
     cam.show_video('test')

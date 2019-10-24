@@ -9,6 +9,13 @@
           </mappings>
         </serverdata>
       </paths>
+      <paths name="pi">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/home/pi/project/neurobot" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="ubuntu16@localhost:2222">
         <serverdata>
           <mappings>
