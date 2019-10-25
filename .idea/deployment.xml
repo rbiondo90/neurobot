@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="PublishConfigData" autoUpload="Always" serverName="deeplearning" uploadOnCheckin="e729e7ba-929d-45da-b80f-09aca83e415e">
+  <component name="PublishConfigData" autoUpload="Always" serverName="pi" uploadOnCheckin="e729e7ba-929d-45da-b80f-09aca83e415e">
     <serverData>
+      <paths name="Copy of project-level server 'pi'">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/tmp/pycharm_project_594" local="$PROJECT_DIR$" />
+          </mappings>
+        </serverdata>
+      </paths>
       <paths name="deeplearning">
         <serverdata>
           <mappings>

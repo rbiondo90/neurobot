@@ -65,25 +65,25 @@ class ClassicObjectBBDetector:
             return cv2.boundingRect(contour)
         return None
 
-    def get_normalized_area(self, image_height, boundary_box):
+    def get_area(self, boundary_box):
         if boundary_box is not None:
-            return int(((boundary_box[2]) * (boundary_box[3]))/(image_height**2) * 1000)
-        return 0
+            return boundary_box[2]*boundary_box[3]
+        return None
 
     def recognize_object(self, image):
         mask = self.get_image_mask(image)
         boundary_box = self.get_object_boundary_box(mask)
         if boundary_box is not None:
-            proximity = self.get_normalized_area(image.shape[0], boundary_box)
+            proximity = self.get_area(boundary_box)
             horizontal_position = self.get_horizontal_position(image.shape[1], boundary_box)
             return True, boundary_box, proximity, horizontal_position
         return False, None, None, None
 
     def get_horizontal_position(self, image_width, boundary_box):
         if boundary_box is not None:
-            horizontal_center = boundary_box[0] + boundary_box[2]/2
-            return horizontal_center/image_width
-        return -1
+            norm_horizontal_center = ((boundary_box[0] + boundary_box[2]/2.)/image_width)*2 - 1
+            return norm_horizontal_center
+        return None
 
 if __name__ == '__main__':
     distanceComputer = ClassicObjectBBDetector()

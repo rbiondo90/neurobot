@@ -13,9 +13,6 @@ class DistanceInterpolator:
             #print(str(e))
             #print("Parameter file not exists or is not a valid JSON!")
 
-    def get_distance(self, area):
-        pass
-
     def get_interpolating_points(self, area):
         if area < self.known_points[0]["area"]:
             return self.known_points[0], self.known_points[1]
@@ -26,10 +23,10 @@ class DistanceInterpolator:
 
     def interpolate(self, area):
         point1, point2 = self.get_interpolating_points(area)
-        x1 = point1["area"]
-        x2 = point2["area"]
-        y1 = point1["distance"]
-        y2 = point2["distance"]
+        x1 = float(point1["area"])
+        x2 = float(point2["area"])
+        y1 = float(point1["distance"])
+        y2 = float(point2["distance"])
         x = area
         deltay = y2 - y1
         deltax = x2 - x1

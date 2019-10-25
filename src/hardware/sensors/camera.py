@@ -12,7 +12,7 @@ class Camera:
     def setup(self):
         if not self.dev.isOpened():
             self.dev.open(self.__devid)
-            print("Device opened")
+            print("Camera inizializzata")
 
     def get_image(self, gray=False):
         ret, frame = self.dev.read()
@@ -23,14 +23,12 @@ class Camera:
 
     def release(self):
         self.dev.release()
-        print("Device released")
+        print("Camera rilasciata")
 
     def show_image(self, window_title ='', gray = False):
-        self.setup()
-        util.imshow(window_title, self.get_image(gray), lambda : self.release())
+        util.imshow(self.get_image(gray), callback=lambda : self.release())
 
     def show_video(self, title = '', frame_interval = 1, frame_elaboration_function=None):
-        self.setup()
         def imageUpdateFunction():
             image = self.get_image()
             if frame_elaboration_function is not None:

@@ -1,4 +1,4 @@
-from hardware.camera import Camera
+from hardware.sensors.camera import Camera
 # from recognizers.object_recognizer.object_recognizer_net import ObjectRecognizerNet
 # from recognizers.object_bounding_box_recognizer.object_bounding_box_recognizer import ObjectBoundingBoxRecognizer
 from recognizers.classic_d_bbr import ClassicObjectBBDetector
