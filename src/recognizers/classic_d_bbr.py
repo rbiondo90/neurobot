@@ -67,7 +67,7 @@ class ClassicObjectBBDetector:
 
     def get_normalized_area(self, image_height, boundary_box):
         if boundary_box is not None:
-            return int(((boundary_box[2]) * (boundary_box[3]))/(image_height**2) * 100)
+            return int(((boundary_box[2]) * (boundary_box[3]))/(image_height**2) * 1000)
         return 0
 
     def recognize_object(self, image):

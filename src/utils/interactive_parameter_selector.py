@@ -1,4 +1,3 @@
-from __future__ import print_function
 import cv2 as cv
 from hardware.camera import Camera
 from recognizers.classic_d_bbr import ClassicObjectBBDetector
