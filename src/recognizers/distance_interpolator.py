@@ -21,7 +21,7 @@ class DistanceInterpolator:
                 return self.known_points[i], self.known_points[i+1]
         return self.known_points[-2], self.known_points[-1]
 
-    def interpolate(self, area):
+    def get_distance(self, area):
         point1, point2 = self.get_interpolating_points(area)
         x1 = float(point1["area"])
         x2 = float(point2["area"])

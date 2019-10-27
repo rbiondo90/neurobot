@@ -52,10 +52,9 @@ class ClassicObjectBBDetector:
     def get_image_mask(self, image):
         filtered_image = cv2.GaussianBlur(image, (self.mask_size, self.mask_size), self.sigma)
         hsv = cv2.cvtColor(filtered_image, cv2.COLOR_BGR2HSV)
-        hsv[:,:,2] = cv2.equalizeHist(hsv[:,:,2])
         mask = cv2.inRange(hsv, tuple(self.lower_bound), tuple(self.upper_bound))
-        mask = cv2.erode(mask, None, self.erode_iterations)
-        mask = cv2.dilate(mask, None, self.dilate_iterations)
+        mask = cv2.erode(mask, None, iterations=self.erode_iterations)
+        mask = cv2.dilate(mask, None, iterations=self.dilate_iterations)
         return mask
 
     def get_object_boundary_box(self, mask):
@@ -74,9 +73,9 @@ class ClassicObjectBBDetector:
         mask = self.get_image_mask(image)
         boundary_box = self.get_object_boundary_box(mask)
         if boundary_box is not None:
-            proximity = self.get_area(boundary_box)
+            area = self.get_area(boundary_box)
             horizontal_position = self.get_horizontal_position(image.shape[1], boundary_box)
-            return True, boundary_box, proximity, horizontal_position
+            return True, boundary_box, area, horizontal_position
         return False, None, None, None
 
     def get_horizontal_position(self, image_width, boundary_box):

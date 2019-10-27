@@ -5,6 +5,7 @@ from recognizers.classic_d_bbr import ClassicObjectBBDetector
 from recognizers.distance_interpolator import DistanceInterpolator
 import platform
 import time
+import numpy as np
 
 class InteractiveParameterSelector:
     
@@ -26,12 +27,14 @@ class InteractiveParameterSelector:
     HIGH_S_NAME = 'High S'
     HIGH_V_NAME = 'High V'
     
-    def __init__(self, detector_settings_file=None, distance_interpolator_settings_file=None):
+    def __init__(self, detector_settings_file=None, distance_interpolator_settings_file=None, camera=None):
         self.detector = ClassicObjectBBDetector(detector_settings_file)
-        if "arm" in platform.machine():
-            self.camera = PiCameraWrapper()
-        else:
-            self.camera = Camera()
+        if camera is None:
+            if "arm" in platform.machine():
+                camera = PiCameraWrapper()
+            else:
+                camera = Camera()
+        self.camera = camera
         if distance_interpolator_settings_file is not None:
             self.distance_interpolator = DistanceInterpolator(distance_interpolator_settings_file)
         else:
@@ -127,7 +130,7 @@ class InteractiveParameterSelector:
                 scaled_eframe = cv2.resize(elaborated_frame, (320,320))
                 if boundary_box is not None:
                     if self.distance_interpolator is not None:
-                        cv2.putText(scaled_frame, "Distance: %.2f" % self.distance_interpolator.interpolate(area),
+                        cv2.putText(scaled_frame, "Distance: %.2f" % self.distance_interpolator.get_distance(area),
                                     (2, 25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2, 2)
 
                     cv2.putText(scaled_frame, "Object area : %d" % area, (2, 50),

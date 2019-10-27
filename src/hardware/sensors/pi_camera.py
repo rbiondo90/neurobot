@@ -6,15 +6,21 @@ import cv2
 
 class PiCameraWrapper(Camera):
 
-    def __init__(self, resolution=(128,128), rotation=180):
+    def __init__(self, resolution=(128,128), rotation=180, framerate=10):
         self.rotation = rotation
         self.resolution = resolution
+        self.framerate = framerate
         self.setup()
 
     def setup(self, retries=0):
         try:
-            self.dev = PiCamera(resolution=self.resolution)
+            self.dev = PiCamera(resolution=self.resolution, framerate=self.framerate)
+            self.dev.brightness = 75
+            self.dev.contrast = 100
+            self.dev.iso = 800
+            self.dev.saturation = 20
             self.dev.rotation = self.rotation
+            self.dev.video_stabilization = True
             print("PiCamera inizializzata.")
         except PiCameraMMALError:
             if retries < 5:
@@ -28,7 +34,7 @@ class PiCameraWrapper(Camera):
         if self.dev is None:
             self.setup()
         raw_capture = PiRGBArray(self.dev)
-        self.dev.capture(raw_capture, format="bgr")
+        self.dev.capture(raw_capture, format="bgr", use_video_port=True)
         frame = raw_capture.array
         if gray:
             cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)

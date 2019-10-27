@@ -1,0 +1,26 @@
+STATE => 14
+
+lwheel_speed(t) 	int(1,3)
+rwheel_speed(t) 	int(1,3)
+lwheel_dir(t)		int{-1,0,1} = {backwards, stopped, forward}
+rwheel_dir(t)		int{-1,0,1} = {backwards, stopped, forward}
+lwheel_speed(t-1)	int(1,3)
+rwheel_speed(t-1)	int(1,3)
+lwheel_dir(t-1)		int{-1,0,1} = {backwards, stopped, forward}
+rwheel_dir(t-1)		int{-1,0,1} = {backwards, stopped, forward}
+
+object_detected(t)	                boolean
+object_horizontal_position(t)       float(-1,1)
+object_distance(t)	                float(0,1)
+object_detected(t-1)	            boolean
+object_distance(t-1)	            float(0,1)
+object_horizontal_position(t-1)     float(-1,1)
+
+OUTPUT => 4
+
+lwheel_speed(t + 1) 	int(1,3)
+rwheel_speed(t + 1) 	int(1,3)
+lwheel_dir(t + 1)	    int{-1,0,1} = {backwards, stopped, forward}
+rwheel_dir(t + 1)	    int{-1,0,1} = {backwards, stopped, forward}
+
+FITNESS(t) = FITNESS(t-1) + (object_distance(t-1) - object_distance(t)) - 1

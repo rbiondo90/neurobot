@@ -6,7 +6,6 @@ from configparser import ConfigParser
 __SETTINGS_FILE_PATH = os.path.join(defaults.CONFIG_DIRECTORY, (__name__.split(".")[-1] + ".ini"))
 
 class __MotorController:
-
     def __init__(self, GPIO_set_1, GPIO_set_2, GPIO_speed_control):
         GPIO.setmode(GPIO.BCM)      # Setting GPIOs to BCM Mode (Pin number = GPIO number)
         self.__GPIO_set_1 = GPIO_set_1
@@ -18,8 +17,9 @@ class __MotorController:
         GPIO.setup(self.__GPIO_speed_control, GPIO.OUT)
         self.__PWM = GPIO.PWM(self.__GPIO_speed_control, 1000)
         self.__PWM.start(15)
-        self.__speed_dutycycle_mapping = [0, 25, 30, 35, 45, 50, 60, 70, 80, 90, 100]
+        self.__speed_dutycycle_mapping = [0, 45, 50, 55, 60, 65, 70, 75, 80, 90, 100]
         self.__speed = 1
+        self.__direction = 0 # ferma
 
 
     def set_speed(self, speed):
@@ -33,6 +33,9 @@ class __MotorController:
 
     def get_speed(self):
         return self.__speed
+
+    def get_direction(self):
+        return self.__direction
 
     def __set_pins(self, pin1_val, pin2_val):
         if pin1_val not in range(0,2) or pin2_val not in range(0,2):
@@ -49,14 +52,17 @@ class __MotorController:
         if self.__speed == 0:
             self.set_speed(1)
         self.__set_pins(GPIO.HIGH, GPIO.LOW)
+        self.__direction = 1
 
     def backwards(self):
         if self.__speed == 0:
             self.set_speed(1)
         self.__set_pins(GPIO.LOW, GPIO.HIGH)
+        self.__direction = -1
 
     def stop(self):
         self.__set_pins(GPIO.LOW, GPIO.LOW)
+        self.__direction = 0
 
 __config = ConfigParser()
 __config.read(__SETTINGS_FILE_PATH)

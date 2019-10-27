@@ -1,0 +1,8 @@
+{"known_points": [
+  {"area": 2500, "distance": 1},
+  {"area": 3500, "distance": 0.75},
+  {"area": 4800, "distance": 0.5},
+  {"area": 7100, "distance": 0.25},
+  {"area": 10000, "distance": 0}
+  ]
+}
