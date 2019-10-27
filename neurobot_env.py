@@ -15,23 +15,6 @@ import threading
 camera = PiCameraWrapper()
 watcher = Watcher(camera=camera, distance_calculator=DistanceInterpolator("brandina.json"))
 selector = InteractiveParameterSelector(distance_interpolator_settings_file="brandina.json", camera=camera)
-def forward():
-	right_wheel.forward()
-	left_wheel.forward()
-
-def backwards():
-	right_wheel.backwards()
-	left_wheel.backwards()
-def rotate():
-	right_wheel.forward()
-	left_wheel.backwards()
-def stop():
-	right_wheel.stop()
-	left_wheel.stop()
-
-def set_speed(val):
-	right_wheel.set_speed(val)
-	left_wheel.set_speed(val)
 
 gp = GeneticPersecutor("first_try", watcher=watcher)
 i = gp.current_generation.individuals[0]
