@@ -48,7 +48,6 @@ class ClassicObjectBBDetector:
         with open(self.specific_settings_file_path, 'w') as config_file:
             config.write(config_file)
 
-
     def get_image_mask(self, image):
         filtered_image = cv2.GaussianBlur(image, (self.mask_size, self.mask_size), self.sigma)
         hsv = cv2.cvtColor(filtered_image, cv2.COLOR_BGR2HSV)

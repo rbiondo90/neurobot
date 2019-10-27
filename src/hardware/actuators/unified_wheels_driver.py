@@ -8,17 +8,27 @@ class __UnifiedWheelsDriver(object):
 
     def __init__(self):
         self.__speed = 0
-        self.__direction = 0
+        self.__direction = 0.
+        self.__update_wheels_speed()
 
     def __update_wheels_speed(self):
-        self.__speed = left_wheel.speed, right_wheel.speed
+        self.right_wheel.speed = int(min(round((1. - self.__direction) * self.__speed), 10.))
+        self.left_wheel.speed = int(min((round(1. + self.__direction) * self.__speed), 10.))
 
     def __normalize_direction(self, direction):
         return float(direction)/10. + 0.5
 
     @property
     def direction(self):
-        pass
+        return int(self.__direction * 10)
+
+    @direction.setter
+    def direction(self, direction):
+        if direction in range(-10,11):
+            self.__direction = float(direction) / 10.
+            self.__update_wheels_speed()
+        else:
+            raise ValueError("Specificare una direzione nell'intervallo [-10,10]")
 
     @property
     def speed(self):

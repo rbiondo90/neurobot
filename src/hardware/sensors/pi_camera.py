@@ -6,7 +6,7 @@ import cv2
 
 class PiCameraWrapper(Camera):
 
-    def __init__(self, resolution=(128,128), rotation=180, framerate=10):
+    def __init__(self, resolution=(128,128), rotation=180, framerate=50):
         self.rotation = rotation
         self.resolution = resolution
         self.framerate = framerate
