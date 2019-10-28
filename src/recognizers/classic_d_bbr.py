@@ -6,8 +6,6 @@ import os
 import defaults
 from configparser import ConfigParser
 import shutil
-import numpy as np
-
 
 class ClassicObjectBBDetector:
     SETTINGS_FILES_PATH = os.path.join(defaults.CONFIG_DIRECTORY,__name__.split(".")[-1])
@@ -79,7 +77,7 @@ class ClassicObjectBBDetector:
 
     def get_horizontal_position(self, image_width, boundary_box):
         if boundary_box is not None:
-            norm_horizontal_center = ((boundary_box[0] + boundary_box[2]/2.)/image_width)*2 - 1
+            norm_horizontal_center = ((boundary_box[0] + boundary_box[2])/image_width)*2 - 1
             return norm_horizontal_center
         return None
 
