@@ -1,5 +1,6 @@
 from wheels_driver import left_wheel, right_wheel
 import numpy as np
+
 '''
 Controller di entrambe le ruote.
 Le velocita' ammissimibili vanno da -10 a 10. I valori negativi fanno muovere le ruote in senso opposto.
@@ -7,6 +8,7 @@ Le direzioni ammissibili vannoda da -3 a 3. I valori -3 e 3 fanno ruotare il rob
 senso antiorario ed orario. I restanti valori fanno andare il robot piu o meno a sinistra, al centro o piu o meno a
 destra. 
 '''
+
 
 def gen_dir_speed_matrix():
     matrix = np.empty((11, 3, 2), dtype=np.int0)
@@ -83,6 +85,7 @@ class __UnifiedWheelsDriver(object):
         else:
             raise ValueError("Specificare un valore di rotazione tra -1 (senso antiorario), 0 (nessuna rotazione) e "
                              "1 (senso orario")
+
     def stop(self):
         self.speed = 0
 

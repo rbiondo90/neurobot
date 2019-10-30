@@ -6,7 +6,7 @@ import cv2
 
 class PiCameraWrapper(Camera):
 
-    def __init__(self, resolution=(128,128), rotation=180, framerate=50):
+    def __init__(self, resolution=(128,128), rotation=180, framerate=30):
         self.rotation = rotation
         self.resolution = resolution
         self.framerate = framerate
@@ -15,10 +15,10 @@ class PiCameraWrapper(Camera):
     def setup(self, retries=0):
         try:
             self.dev = PiCamera(resolution=self.resolution, framerate=self.framerate)
-            self.dev.brightness = 75
-            self.dev.contrast = 100
             self.dev.iso = 800
-            self.dev.saturation = 20
+            # self.dev.brightness = 50
+            # self.dev.saturation = 50
+            # self.dev.contrast = 25
             self.dev.rotation = self.rotation
             self.dev.video_stabilization = True
             print("PiCamera inizializzata.")

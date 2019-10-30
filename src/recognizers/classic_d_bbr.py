@@ -3,12 +3,13 @@ Classic detector and boundary box recognizer
 """
 import cv2
 import os
-import defaults
+from utils import defaults
 from configparser import ConfigParser
 import shutil
+import numpy as np
 
 class ClassicObjectBBDetector:
-    SETTINGS_FILES_PATH = os.path.join(defaults.CONFIG_DIRECTORY,__name__.split(".")[-1])
+    SETTINGS_FILES_PATH = os.path.join(defaults.CONFIG_DIRECTORY, __name__.split(".")[-1])
     DEFAULT_SETTINGS_FILE_PATH = os.path.join(SETTINGS_FILES_PATH, "defaults.ini")
     SETTINGS_FILE_PATH = os.path.join(SETTINGS_FILES_PATH, "settings.ini")
 
@@ -18,6 +19,7 @@ class ClassicObjectBBDetector:
         else:
             self.specific_settings_file_path = os.path.join(self.SETTINGS_FILES_PATH, custom_settings_file)
         self.reload_settings()
+        self.filter_contours = True
 
     def reload_settings(self):
         # Se il file non esiste ancora, viene copiato ed utilizzato il file delle impostazioni di default
@@ -49,6 +51,7 @@ class ClassicObjectBBDetector:
     def get_image_mask(self, image):
         filtered_image = cv2.GaussianBlur(image, (self.mask_size, self.mask_size), self.sigma)
         hsv = cv2.cvtColor(filtered_image, cv2.COLOR_BGR2HSV)
+        #hsv[:,:,2] = cv2.equalizeHist(hsv[:,:,2])
         mask = cv2.inRange(hsv, tuple(self.lower_bound), tuple(self.upper_bound))
         mask = cv2.erode(mask, None, iterations=self.erode_iterations)
         mask = cv2.dilate(mask, None, iterations=self.dilate_iterations)
@@ -77,7 +80,7 @@ class ClassicObjectBBDetector:
 
     def get_horizontal_position(self, image_width, boundary_box):
         if boundary_box is not None:
-            norm_horizontal_center = ((boundary_box[0] + boundary_box[2])/image_width)*2 - 1
+            norm_horizontal_center = (float((boundary_box[0] + boundary_box[2]))/image_width)*2. - 1.
             return norm_horizontal_center
         return None
 

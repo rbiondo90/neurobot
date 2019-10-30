@@ -5,12 +5,10 @@ import cv2
 from keras.models import Sequential
 from keras.layers.convolutional import Conv2D
 from keras.layers.convolutional import MaxPooling2D
-from keras.layers.core import Activation
 from keras.layers.core import Flatten
 from keras.layers.core import Dense
 from keras import models
 from keras.optimizers import Adam
-from keras_preprocessing.image import img_to_array
 from keras import backend
 import os
 import numpy as np
@@ -18,7 +16,7 @@ from keras.losses import mean_absolute_error
 
 from sklearn.model_selection import train_test_split
 
-import defaults
+from utils import defaults
 import matplotlib.pyplot as plt
 from recognizers.object_bounding_box_recognizer.obbr_dataset_loader import load_dataset
 

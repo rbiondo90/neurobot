@@ -1,6 +1,7 @@
 import json
 import os
-import defaults
+from utils import defaults
+
 
 class DistanceInterpolator:
     FILES_DIRECTORY = os.path.join(defaults.CONFIG_DIRECTORY, os.path.basename(__file__).split(".")[0])

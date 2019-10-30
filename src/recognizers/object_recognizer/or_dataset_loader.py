@@ -4,10 +4,9 @@ import time
 
 import cv2
 from imutils import paths
-from keras_preprocessing.image import img_to_array
 import numpy as np
 
-import defaults
+from utils import defaults
 
 DEFAULT_DATASET_DIRECTORY = os.path.join(defaults.DATASETS_DIRECTORY, "item_no_item_dataset")
 def load_dataset(dataset_path=DEFAULT_DATASET_DIRECTORY, im_size = (128,128), shuffle=True):

@@ -1,7 +1,6 @@
-import defaults
+from utils import defaults
 import os
 import numpy as np
-import json
 from configparser import ConfigParser
 import random
 from hardware.actuators.wheels_driver import left_wheel, right_wheel
