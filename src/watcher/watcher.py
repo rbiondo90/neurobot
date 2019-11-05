@@ -1,6 +1,3 @@
-import platform
-
-from hardware.sensors.camera import Camera
 from hardware.sensors.pi_camera import PiCameraWrapper
 from recognizers.classic_d_bbr import ClassicObjectBBDetector
 from recognizers.distance_interpolator import DistanceInterpolator
@@ -14,10 +11,7 @@ class Watcher:
         if distance_calculator is None:
             distance_calculator = DistanceInterpolator("wheel.json")
         if camera is None:
-            if "arm" in platform.machine():
-                camera = PiCameraWrapper()
-            else:
-                camera = Camera()
+            camera = PiCameraWrapper
         self.camera = camera
         self.object_recognizer = object_recognizer
         self.distance_calculator = distance_calculator

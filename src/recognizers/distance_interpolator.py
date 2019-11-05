@@ -1,6 +1,6 @@
 import json
 import os
-from utils import defaults
+from utils.generic import defaults
 
 
 class DistanceInterpolator:

@@ -6,7 +6,7 @@ import cv2
 from imutils import paths
 import numpy as np
 
-from utils import defaults
+from utils.generic import defaults
 
 DEFAULT_DATASET_DIRECTORY = os.path.join(defaults.DATASETS_DIRECTORY, "item_no_item_dataset")
 def load_dataset(dataset_path=DEFAULT_DATASET_DIRECTORY, im_size = (128,128), shuffle=True):

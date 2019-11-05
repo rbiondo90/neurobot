@@ -16,7 +16,7 @@ from keras.losses import mean_absolute_error
 
 from sklearn.model_selection import train_test_split
 
-from utils import defaults
+from utils.generic import defaults
 import matplotlib.pyplot as plt
 from recognizers.object_bounding_box_recognizer.obbr_dataset_loader import load_dataset
 

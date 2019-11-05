@@ -1,4 +1,4 @@
-from utils import defaults
+from utils.generic import defaults
 import os
 import numpy as np
 from configparser import ConfigParser

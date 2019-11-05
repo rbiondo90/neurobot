@@ -8,7 +8,7 @@ from keras_preprocessing.image import img_to_array
 import numpy as np
 from xml.dom import minidom
 from recognizers.object_recognizer import or_dataset_loader
-from utils import defaults
+from utils.generic import defaults
 
 DEFAULT_IMAGE_DIRECTORY = os.path.join(or_dataset_loader.DEFAULT_DATASET_DIRECTORY, "item")
 DEFAULT_BOXES_DIRECTORY = os.path.join(defaults.DATASETS_DIRECTORY, "item_boxes_dataset")

@@ -1,5 +1,5 @@
 from inputs import devices
-from utils.daemon import Daemon
+from utils.generic.daemon import Daemon
 
 
 class USBJoypad:

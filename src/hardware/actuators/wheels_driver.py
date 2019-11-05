@@ -1,6 +1,6 @@
 from RPi import GPIO
 import os
-from utils import defaults
+from utils.generic import defaults
 from configparser import ConfigParser
 
 __SETTINGS_FILE_PATH = os.path.join(defaults.CONFIG_DIRECTORY, (__name__.split(".")[-1] + ".ini"))

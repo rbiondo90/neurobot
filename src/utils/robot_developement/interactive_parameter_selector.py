@@ -1,12 +1,8 @@
 import cv2
-from hardware.sensors.camera import Camera
 from hardware.sensors.pi_camera import PiCameraWrapper
 from recognizers.classic_d_bbr import ClassicObjectBBDetector
 from recognizers.distance_interpolator import DistanceInterpolator
-import platform
 import time
-import numpy as np
-
 class InteractiveParameterSelector:
     
     MAX_VALUE = 255
@@ -30,10 +26,7 @@ class InteractiveParameterSelector:
     def __init__(self, detector_settings_file=None, distance_interpolator_settings_file=None, camera=None):
         self.detector = ClassicObjectBBDetector(detector_settings_file)
         if camera is None:
-            if "arm" in platform.machine():
-                camera = PiCameraWrapper()
-            else:
-                camera = Camera()
+            camera = PiCameraWrapper
         self.camera = camera
         if distance_interpolator_settings_file is not None:
             self.distance_interpolator = DistanceInterpolator(distance_interpolator_settings_file)

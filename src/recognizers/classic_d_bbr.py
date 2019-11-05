@@ -3,10 +3,10 @@ Classic detector and boundary box recognizer
 """
 import cv2
 import os
-from utils import defaults
+from utils.generic import defaults
 from configparser import ConfigParser
 import shutil
-import numpy as np
+
 
 class ClassicObjectBBDetector:
     SETTINGS_FILES_PATH = os.path.join(defaults.CONFIG_DIRECTORY, __name__.split(".")[-1])

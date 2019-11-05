@@ -1,48 +1,64 @@
-from hardware.sensors.camera import Camera
 from picamera import PiCamera
 from picamera.array import PiRGBArray
-from picamera.exc import PiCameraMMALError
+from utils.generic.daemon import Daemon
 import cv2
+import time
 
-class PiCameraWrapper(Camera):
+class PiCameraWrapper():
+    thread = None
+    jpg_frame = None
+    image = None
+    dev = None
+    last_access = 0
+    resolution = (256, 256)
+    iso = 800
+    rotation = 180
+    framerate = 30
 
-    def __init__(self, resolution=(128,128), rotation=180, framerate=30):
-        self.rotation = rotation
-        self.resolution = resolution
-        self.framerate = framerate
-        self.setup()
+    @classmethod
+    def initalize(cls):
+        if PiCameraWrapper.thread is None:
+            # Avvia il thread di generazione dei frame
+            PiCameraWrapper.thread = Daemon(target=cls._daemon_function)
+            PiCameraWrapper.thread.start()
 
-    def setup(self, retries=0):
-        try:
-            self.dev = PiCamera(resolution=self.resolution, framerate=self.framerate)
-            self.dev.iso = 800
-            # self.dev.brightness = 50
-            # self.dev.saturation = 50
-            # self.dev.contrast = 25
-            self.dev.rotation = self.rotation
-            self.dev.video_stabilization = True
-            print("PiCamera inizializzata.")
-        except PiCameraMMALError:
-            if retries < 5:
-                self.dev.close()
-                self.setup(retries + 1)
-            else:
-                print("Non riesco ad inizializzare la PiCamera.")
+            # Attendi fino a quando il primo frame non e' disponibile
+            while cls.jpg_frame is None:
+                time.sleep(0)
 
+    # def get_image(self, gray=False):
+    #     if self.dev is None:
+    #         self.setup()
+    #     raw_capture = PiRGBArray(self.dev)
+    #     self.dev.capture(raw_capture, format="bgr", use_video_port=True)
+    #     frame = raw_capture.array
+    #     if gray:
+    #         cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    #     return frame
 
-    def get_image(self, gray=False):
-        if self.dev is None:
-            self.setup()
-        raw_capture = PiRGBArray(self.dev)
-        self.dev.capture(raw_capture, format="bgr", use_video_port=True)
-        frame = raw_capture.array
-        if gray:
-            cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-        return frame
+    @classmethod
+    def get_jpg_frame(cls):
+        PiCameraWrapper.last_access = time.time()
+        cls.initalize()
+        return cls.jpg_frame
 
-    def release(self):
-        if self.dev is not None:
-            self.dev.close()
-            self.dev = None
-            print("PiCamera rilasciata")
+    @classmethod
+    def get_image(cls):
+        PiCameraWrapper.last_access = time.time()
+        cls.initalize()
+        return cls.image
 
+    @classmethod
+    def _daemon_function(cls):
+        with PiCamera(resolution=cls.resolution, framerate=cls.framerate) as camera:
+            cls.dev = camera
+            camera.rotation = cls.rotation
+            stream = PiRGBArray(camera, cls.resolution)
+            for frame in camera.capture_continuous(stream, format='bgr', use_video_port=True):
+                cls.image = frame.array
+                stream.truncate(0)
+                cls.jpg_frame = cv2.imencode('.jpg',cls.image,[int(cv2.IMWRITE_JPEG_QUALITY),25])[1].tostring()
+                # se non ci sono state richieste da parte di alcun client negli ultimi 10 secondi ferma il thread
+                if time.time() - cls.last_access > 10:
+                    break
+        cls.thread = None

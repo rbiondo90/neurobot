@@ -1,7 +1,7 @@
 from hardware.actuators.usb_joypad import USBJoypad
 from hardware.actuators.unified_wheels_driver import driver
 import time
-from utils.daemon import Daemon
+from utils.generic.daemon import Daemon
 
 
 class HumanControl:

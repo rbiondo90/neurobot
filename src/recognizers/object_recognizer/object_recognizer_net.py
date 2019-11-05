@@ -18,7 +18,7 @@ import cv2
 from keras_preprocessing.image import img_to_array
 from keras.utils import to_categorical
 import os
-from utils import defaults
+from utils.generic import defaults
 import numpy as np
 
 
