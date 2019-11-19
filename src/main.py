@@ -30,6 +30,7 @@ ws.run()
 s = Daemon(target=selector.start)
 try:
     hc = HumanControl()
+    hc.start()
 except:
     pass
 # ws.run()

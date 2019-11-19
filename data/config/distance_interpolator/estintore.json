@@ -1,8 +1,8 @@
 {"known_points": [
-  {"area": 1300, "distance": 1},
-  {"area": 1710, "distance": 0.75},
-  {"area": 2600, "distance": 0.5},
-  {"area": 5000, "distance": 0.25},
-  {"area": 7800, "distance": 0}
+  {"area": 70, "distance": 1},
+  {"area": 180, "distance": 0.75},
+  {"area": 600, "distance": 0.5},
+  {"area": 2000, "distance": 0.25},
+  {"area": 4100, "distance": 0}
   ]
 }

@@ -15,14 +15,14 @@ class Goer:
             else:
                 arrived = True if distance < 0.02 else False
                 if not arrived:
-                    self.driver.direction = int(round(h_pos * 3))
+                    self.driver.direction = int(round(h_pos * self.driver.DIRECTION_LEVELS))
                     self.driver.speed = int(10 * distance)
                 else:
                     if abs(h_pos) < 0.05:
                         self.driver.speed = 0
                         self.driver.direction = 0
                     else:
-                        self.driver.direction = -3 if h_pos < 0 else 3
+                        self.driver.direction = -self.driver.DIRECTION_LEVELS if h_pos < 0 else self.driver.DIRECTION_LEVELS
                         self.driver.speed = int(10 * distance ** 2)
         #self.driver.speed = 0
         #elf.driver.direction = 0
@@ -32,8 +32,8 @@ class Goer:
         recognized = False
         h_pos = 1
         while not recognized and abs(h_pos) > 0.05:
-            self.driver.direction = 3
-            self.driver.speed = 6
+            self.driver.direction = self.driver.DIRECTION_LEVELS
+            self.driver.speed = 7
             recognized, distance, h_pos = self.watcher.watch()
             if h_pos is None:
                 h_pos = 1

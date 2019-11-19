@@ -1,4 +1,4 @@
-from hardware.actuators.usb_joypad import USBJoypad
+from hardware.actuators.joypads import USBJoypad, PS4Joypad
 from hardware.actuators.unified_wheels_driver import driver
 import time
 from utils.generic.daemon import Daemon
@@ -7,7 +7,10 @@ from utils.generic.daemon import Daemon
 class HumanControl:
 
     def __init__(self):
-        self.joy = USBJoypad()
+        try:
+            self.joy = PS4Joypad()
+        except RuntimeError:
+            self.joy = USBJoypad()
         self.enabled = False
 
     def start(self):
@@ -18,11 +21,12 @@ class HumanControl:
             while self.enabled:
                 x = self.joy.left_analog[0]
                 y = self.joy.left_analog[1]
-                speed = int(10 - y / 12.75)
-                direction = int(x / 63. - 2)
-                if speed == 0 and direction != 0:
+                if y not in range(118, 139):
+                    speed = int(10 - y / 12.75)
+                    direction = int(x / 42.5 - 3)
+                else:
                     speed = int(abs(10 - x / 12.75))
-                    direction = -3 if direction < 0 else 3
+                    direction = -3 if x < 128 else 3
                 driver.speed = speed
                 driver.direction = direction
                 time.sleep(0.1)
