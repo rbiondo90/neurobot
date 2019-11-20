@@ -3,6 +3,7 @@ from utils.generic.daemon import Daemon
 from evdev import InputDevice, categorize, ecodes
 import glob
 
+
 class USBJoypad:
 
     def __init__(self, idx=0):
@@ -38,22 +39,27 @@ class USBJoypad:
     def disable(self):
         self.enabled = False
 
+
 class PS4Joypad:
     LEFT_ANALOG_X_EV_CODE = 0
     LEFT_ANALOG_Y_EV_CODE = 1
+    OPTIONS_EV_CODE = 315
+    ANALOG_EV_TYPE = 3
+    STD_BUTTON_EV_TYPE = 1
 
     def __init__(self):
+        self.dev = None
         for elem in glob.glob("/dev/input/event*"):
             if InputDevice(elem).name == "Wireless Controller":
                 self.dev = InputDevice(elem)
         if self.dev is None:
-            raise RuntimeError("Non trovo il controller PS4")
+            raise RuntimeError("[PS4Joypad] Non trovo il controller PS4")
         self.left_analog = [128, 128]
-        #self.enable()
+        self.options = self.Button(self.OPTIONS_EV_CODE)
 
     def test(self):
         for event in self.dev.read_loop():
-            if event.code == self.LEFT_ANALOG_Y_EV_CODE and event.value > 0:
+            if (event.type == 1):
                 print(event.code, event.value, event.type)
 
     def enable(self):
@@ -62,10 +68,14 @@ class PS4Joypad:
         def status_refresh():
             for event in self.dev.read_loop():
                 if self.enabled:
-                    if event.type == 3 and event.code == self.LEFT_ANALOG_X_EV_CODE:
-                        self.left_analog[0] = event.value
-                    elif event.type == 3 and event.code == self.LEFT_ANALOG_Y_EV_CODE:
-                         self.left_analog[1] = event.value
+                    if event.type == self.ANALOG_EV_TYPE:
+                        if event.code == self.LEFT_ANALOG_X_EV_CODE:
+                            self.left_analog[0] = event.value
+                        elif event.code == self.LEFT_ANALOG_Y_EV_CODE:
+                            self.left_analog[1] = event.value
+                    elif event.type == self.STD_BUTTON_EV_TYPE:
+                        if event.code == self.OPTIONS_EV_CODE:
+                            self.options.status = int(event.value)
                 else:
                     break
 
@@ -73,3 +83,25 @@ class PS4Joypad:
 
     def disable(self):
         self.enabled = False
+
+    class Button(object):
+        def __init__(self, code):
+            self.code = code
+            self._pressed = False
+            self._status = 0
+
+        @property
+        def pressed(self):
+            pressed = self._pressed
+            self._pressed = False
+            return pressed
+
+        @property
+        def status(self):
+            return self._status
+
+        @status.setter
+        def status(self, val):
+            self._status = val
+            if val > 0:
+                self._pressed = True

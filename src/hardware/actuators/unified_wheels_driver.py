@@ -89,6 +89,7 @@ class __UnifiedWheelsDriver(object):
 
     def stop(self):
         self.speed = 0
+        self.direction = 0
 
 
 driver = __UnifiedWheelsDriver()
