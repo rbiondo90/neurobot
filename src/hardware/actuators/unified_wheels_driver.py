@@ -1,5 +1,7 @@
 from wheels_driver import left_wheel, right_wheel, MotorController
 import numpy as np
+import rospy
+from std_msgs.msg import String
 
 '''
 Controller di entrambe le ruote.
@@ -93,3 +95,16 @@ class __UnifiedWheelsDriver(object):
 
 
 driver = __UnifiedWheelsDriver()
+
+def start_ros_node():
+    pub = rospy.Publisher('wheels_speed', String)
+    rospy.init_node('wheels_driver')
+    rate = rospy.Rate(1)
+    while not rospy.is_shutdown():
+        status_str = "speed = %d, direction = %d" % (driver.speed, driver.direction)
+        rospy.loginfo(status_str)
+        pub.publish(status_str)
+        rate.sleep()
+
+if __name__ == '__main__':
+    start_ros_node()
